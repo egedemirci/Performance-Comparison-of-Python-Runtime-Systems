@@ -4,9 +4,11 @@ import json
 import time
 import tempfile
 import os
+import tracemalloc
+
 
 def benchmark_io():
-    iterations = 10
+    iterations = 100
     data = "Hello, world!\n" * 10000
     
     def io_task():
@@ -21,11 +23,14 @@ def benchmark_io():
     return total_time
 
 if __name__ == "__main__":
+    tracemalloc.start()
     runtime = benchmark_io()
+    print(tracemalloc.get_traced_memory())
+    tracemalloc.stop()
     result = {
         "benchmark": "io_benchmark",
         "runtime": runtime,
-        "iterations": 10,
+        "iterations": 100,
         "timestamp": time.time()
     }
     print(json.dumps(result))
