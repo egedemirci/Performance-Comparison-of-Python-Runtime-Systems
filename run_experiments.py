@@ -10,12 +10,11 @@ benchmarks = [
     "benchmarks/fib_benchmark.py",
     "benchmarks/sort_benchmark.py",
     "benchmarks/io_benchmark.py",
-    "benchmarks/memory_benchmark.py",
-    "benchmarks/concurrency_benchmark.py",
     "benchmarks/json_benchmark.py",
     "benchmarks/nbody_benchmark.py",
     "benchmarks/asyncio_benchmark.py",
-     "benchmarks/dictionary_benchmark.py" 
+    "benchmarks/dictionary_benchmark.py",
+    "benchmarks/prime.py" 
 ]
 
 interpreters = {"CPython": "python3", "PyPy": "pypy3", "Jython": "jython"}
@@ -49,7 +48,6 @@ def run_benchmark(interpreter, script):
     mem_before = rusage_before.ru_maxrss
     mem_after = rusage_after.ru_maxrss
     peak = max(mem_before, mem_after)
-    data["peak_memory_MB"] = peak / 1024.0
     data["interpreter"] = interpreter
     data["script"] = script
     if "timestamp" not in data:
@@ -72,7 +70,7 @@ def main():
         with open(results_csv, "w", newline="") as csvfile:
             fieldnames = [
                 "timestamp", "interpreter", "script", "benchmark",
-                "iterations", "runtime", "wall_time", "cpu_time", "peak_memory_MB"
+                "iterations", "runtime", "wall_time", "cpu_time"
             ]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
@@ -86,8 +84,7 @@ def main():
                     "iterations": r.get("iterations"),
                     "runtime": r.get("runtime"),
                     "wall_time": r.get("wall_time"),
-                    "cpu_time": r.get("cpu_time"),
-                    "peak_memory_MB": r.get("peak_memory_MB")
+                    "cpu_time": r.get("cpu_time")
                 })
         print(f"All results have been saved to {results_csv}")
     else:
